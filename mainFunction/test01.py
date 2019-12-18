@@ -9,8 +9,15 @@ from bs4 import BeautifulSoup
 #from PyQt5.QtGui import QIcon, QFont
 #from PyQt5.QtCore import QCoreApplication, QDate, Qt
 
-HOST = 'localhost'
+HOST = '13.209.174.89'
 PORT = 9009
+
+""" Lambda 연결(테스트는 클라이언트에서 하지만 실제론 서버에서 작동)
+link = "https://rta2983gfl.execute-api.ap-northeast-2.amazonaws.com/default/myHelloWorld"
+headers = {'auth':'v89uh45378uv4h3587vh34598ygh3458gyu43h5tu34'}
+res = requests.get(link, headers=headers)
+print(res.json())
+"""
 
 class MyApp(QMainWindow):
     def __init__(self):
@@ -125,8 +132,6 @@ class FirstTab(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.initUI()
-
     def initUI(self):
         subTabs = QTabWidget()
         subTabs.addTab(subFirstTab(), '공지사항')
@@ -142,8 +147,6 @@ class FirstTab(QWidget):
 class subFirstTab(FirstTab):
     def __init__(self):
         super().__init__()
-
-        self.initUI()
 
     #@property
     def initUI(self):
@@ -214,7 +217,6 @@ class subSecondTab(FirstTab):
     def __init__(self):
         super().__init__()
 
-
     def initUI(self):
         lan_group = QGroupBox('Select Your Language')
         combo = QComboBox()
@@ -254,14 +256,12 @@ class subSecondTab(FirstTab):
 
     def msgSendButton(self): # 메시지전송(추후엔 펑션메시지 전송으로 대체)
         msg = self.te.toPlainText()
-        server.send(msg.encode('utf-16'))
+        #server.send(msg.encode('utf-16'))
 
 # 상품 작업 탭
 class SecondTab(QWidget):
     def __init__(self):
         super().__init__()
-
-        self.initUI()
 
     def initUI(self):
         lan_group = QGroupBox('Select Your Language')
@@ -293,8 +293,6 @@ class SecondTab(QWidget):
 class ThirdTab(QWidget):
     def __init__(self):
         super().__init__()
-
-        self.initUI()
 
     def initUI(self):
         lbl = QLabel('Terms and Conditions')
@@ -328,7 +326,35 @@ def rcvMsg(sock):
         except:
             pass
 
+class loginLogic(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        lbl = QLabel('Terms and Conditions')
+        text_browser = QTextBrowser()
+        text_browser.setText('This is the terms and conditions')
+        checkbox = QCheckBox('Check the terms and conditions.')
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(lbl)
+        vbox.addWidget(text_browser)
+        vbox.addWidget(checkbox)
+
+        self.setLayout(vbox)
+        self.show()
+
+
 if __name__ == '__main__':
+
+    app = QApplication(sys.argv)
+    app.setWindowIcon(QIcon('web.png'))
+    ex = loginLogic()
+    sys.exit(app.exec_())
+
+
     # 서버 연결 부분
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
@@ -340,8 +366,7 @@ if __name__ == '__main__':
         t = Thread(target=rcvMsg, args=(server,))
         t.daemon = True
         t.start()
-
-    app = QApplication(sys.argv)
-    app.setWindowIcon(QIcon('web.png'))
-    ex = MyApp()
-    sys.exit(app.exec_())
+        app = QApplication(sys.argv)
+        app.setWindowIcon(QIcon('web.png'))
+        ex = MyApp()
+        sys.exit(app.exec_())

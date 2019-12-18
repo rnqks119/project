@@ -1,7 +1,7 @@
-import socketserver, pymysql
+import socketserver
 import threading
 
-HOST = ''
+HOST = ""
 PORT = 9009
 lock = threading.Lock() # syncronized 동기화 진행하는 스레드 생성
 
